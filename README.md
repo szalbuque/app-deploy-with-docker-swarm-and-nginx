@@ -48,9 +48,9 @@ Rede: <br>
   * Adicionei as linhas:
     * vpc_security_group_ids = ["sg-...."]
     * subnet_id = "s..."
-  * Rodei novamente o terraform apply e deu a mensagem de sucesso: aws_instance.app_server: Creation complete after 44s [id=i-0a3626191a421e3b3]
+  * Rodei novamente o terraform apply e deu a mensagem de sucesso: aws_instance.app_server: Creation complete after 44s [id=i-0a3626191a421e3b3]<br>
 Visualização da vm criada no dashboard da AWS:
-
+ ![](/images/example-instance.png)
 
 
 
