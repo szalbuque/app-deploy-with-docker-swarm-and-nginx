@@ -85,9 +85,39 @@ Visualização da vm criada no dashboard da AWS:
 
 ### Usar o Terraform para criar as três instâncias EC2 que serão usadas como nós do cluster:
 Alterei o arquivo main.tf para criar três instâncias de máquinas t2.micro. 
-Rodei o comando terraform apply e ele destruiu a instância de teste que tinha sido criada anteriormente, já que não estava na programação do arquivo.
-As três instâncias foram criadas.
+Para isso, foi incluída a linha "count = 3" e alterei o código para atribuir tags de acordo com o número da máquina.
+> resource "aws_instance" "app" {<br>
+>  <b>count                  = 3</b><br>
+>  ami                    = "ami-830c94e3"<br>
+>  instance_type          = "t2.micro"<br>
+>  vpc_security_group_ids = ["sg-0b..."]<br>
+>  subnet_id              = "subnet-0d..."<br>
+><br>
+> <b> tags = {<br>
+>    Name = "app${count.index}"</b><br>
+>  }<br>
+>}<br>
 
+<br>
 
+### Imagem das instâncias criadas na AWS:
 
+![](images/instancesec2.png)
+<br>
 
+### Problema na criação das instâncias: faltou criar chaves de acesso.
+* destruir as instâncias e criar novamente com chave de acesso configurada
+* incluir a linha: "associate_public_ip_address = true", para que seja atribuído um IP público a cada instância, de modo que elas sejam acessíveis por SSH
+* Funcionou:
+
+![](images/ec2instancespublicip.png)
+
+### Código incluído no arquivo main.tf para que as instâncias sejam criadas com IP público e associadas a um par de chaves:
+
+![](images/terraformCodeIPKeyPair.png)
+
+### Instâncias criadas com este código:
+
+![](images/ec2instancesPublicIPKeyPair.png)
+
+Não estou conseguindo acessar as instâncias por SSH. O erro é connection time out. 
