@@ -127,4 +127,5 @@ Alterações realizadas:
 * retirei a linha de atribuição de IP público para as outras instâncias, que farão parte do cluster
 Ainda com erro. Usei o terraform destroy.
 Vou criar um main.tf que faça a configuração completa, incluindo rede e grupo de segurança.
-
+* Isso pode ter algo a ver com as credenciais de acesso do IAM user? Me parece que não, porque isso causaria o não funcionamento da criação das instâncias. As instâncias foram criadas, mas não consegui acessar por SSH. Pode ser algum erro na configuração do grupo de segurança, ou faltou configurar corretamente o firewall.
+* 
