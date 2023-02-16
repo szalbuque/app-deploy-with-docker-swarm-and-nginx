@@ -121,3 +121,10 @@ Para isso, foi incluída a linha "count = 3" e alterei o código para atribuir t
 ![](images/ec2instancesPublicIPKeyPair.png)
 
 Não estou conseguindo acessar as instâncias por SSH. O erro é connection time out. 
+Criar uma bastion host com IP público e as outras máquinas com IP privado. Testar.
+Alterações realizadas:
+* criei mais uma instância EC2 para funcionar como bastion host, com IP público
+* retirei a linha de atribuição de IP público para as outras instâncias, que farão parte do cluster
+Ainda com erro. Usei o terraform destroy.
+Vou criar um main.tf que faça a configuração completa, incluindo rede e grupo de segurança.
+
