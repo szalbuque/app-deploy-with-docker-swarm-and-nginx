@@ -44,3 +44,27 @@ Se um dos nós tiver um problema de hardware e parar de funcionar, o Docker Swar
 * VPC e instâncias EC2 criadas com o Terraform.
 * Veja os passos em: [Passos para criação do ambiente com Terraform](./terraform/tfREADME.md)
   
+## Conectar na instância via SSH:
+
+> ssh -i "dio-app-key" ec2-user@IP.EXTERNO.DA.INSTANCIA   
+
+## Instalar o docker nos nós do cluster:
+* Atualizar o linux: sudo yum update
+* Instalar o docker: sudo yum install docker
+* Iniciar o docker deamon: sudo systemctl start docker
+
+## Clonar o repositório da aplicação para a instância 0:
+* instalar o git:
+> yum install git 
+* fazer o clone (na pasta /home/ec2-user):
+> git clone https://github.com/denilsonbonatti/toshiro-shibakita.git
+
+
+## Criar o container do banco de dados na instância 0:
+* Baixar a imagem do mysql
+> sudo docker pull mysql
+* 
+> 
+
+## Criação do container da aplicação em PHP:
+> /var/lib/docker/volumes
