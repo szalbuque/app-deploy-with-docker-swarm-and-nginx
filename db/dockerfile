@@ -1,0 +1,11 @@
+FROM mysql/mysql-server
+
+ENV MYSQL_ROOT_PASSWORD=12345
+
+ENV MYSQL_DATABASE=meubanco
+
+COPY ./banco.sql /docker-entrypoint-initdb.d/setup.sql
+
+EXPOSE 3306
+
+CMD ["mysqld"]
