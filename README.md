@@ -63,8 +63,31 @@ Se um dos nós tiver um problema de hardware e parar de funcionar, o Docker Swar
 ## Criar o container do banco de dados na instância 0:
 * Baixar a imagem do mysql
 > sudo docker pull mysql
-* 
-> 
+* Criar um volume para armazenar os dados (O docker aloca o volume na pasta /var/lib/docker/volumes):
+> docker volume create volumedb
+> [root@ip-10-0-101-148 toshiro-shibakita]# docker volume ls
+
+DRIVER  |  VOLUME NAME
+--------|-------------
+local   |  5ce55ecfd682eb854717d7425c133b6a26c9e5e23c4de69c42e956f3cba306e1
+local   |  volumedb
+
+  
+* Criar o container
+> docker container run --name mysqldb -v volumedb:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=12345 -d mysql<br>
+> docker ps<br>
+
+CONTAINER ID |  IMAGE   |  COMMAND     |             CREATED   |      STATUS    |     PORTS        |         NAMES
+-------------|----------|--------------|-----------------------|----------------|------------------|------------------
+ff91469d1447 |  mysql   |  "docker-entrypoint.s…" |  7 seconds ago |  Up 6 seconds |  3306/tcp, 33060/tcp |  mysqldb
+
+* Entrar no container:
+> docker exec -it mysqldb /bin/bash
+
+* Entrar no mysql:
+> mysql -u root -p
+
+
 
 ## Criação do container da aplicação em PHP:
 > /var/lib/docker/volumes
