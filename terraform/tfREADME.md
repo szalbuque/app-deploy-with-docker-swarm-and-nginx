@@ -80,3 +80,11 @@ Para isso, foi incluída a linha "count = 3" e alterei o código para atribuir t
 ## Problema de acesso via SSH 
 * Ainda não consigo acessar, dá "time out".
 * Vou verificar as permissões no security group.
+* Adicionei uma "Inbound Rule" liberando o acesso por SSH:
+
+![](../images/editInboundRules.png)
+
+* Consegui acesso via SSH:
+
+![](../images/acessoSSH.png)
+
