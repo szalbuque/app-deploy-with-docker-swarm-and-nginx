@@ -35,13 +35,14 @@ module "vpc" {
 }
 
 # defines a key pair that will be assigned to the EC2 instances
+# uses a public key created locally
 
 module "key-pair" {
   source  = "terraform-aws-modules/key-pair/aws"
   version = "2.0.2"
 
   name = var.key_name
-  
+  public_key = file("../dio-app-key.pub")
 }
 
 #  defines three EC2 instances provisioned within the VPC created by the module.
@@ -55,7 +56,7 @@ module "ec2_instances" {
 
   ami                    = "ami-0c5204531f799e0c6"
   instance_type          = "t2.micro"
-  key_name                = "user1"
+  key_name                = module.key-pair.key_pair_name
   vpc_security_group_ids = [module.vpc.default_security_group_id]
   subnet_id              = module.vpc.public_subnets[0]
 
@@ -63,34 +64,4 @@ module "ec2_instances" {
     Terraform   = "true"
     Environment = "dev"
   }
-}
-
-------------------
-resource "aws_instance" "app" {
-  count                  = 3
-  ami                    = "ami-830c94e3"
-  instance_type          = "t2.micro"
-  vpc_security_group_ids = ["sg-0b7201237697afaa4"]
-  subnet_id              = "subnet-0db4d98abc8eb6a2a"
-  associate_public_ip_address = true
-  key_name = "TF_key"
-
-  tags = {
-    Name = "app${count.index}"
-  }
-}
-
-resource "tls_private_key" "rsa" {
-  algorithm = "RSA"
-  rsa_bits = 4096
-}
-
-resource "aws_key_pair" "TF_key" {
-  key_name = "TF_key"
-  public_key = tls_private_key.rsa.public_key_openssh
-}
-
-resource "local_file" "TF_key" {
-  content = tls_private_key.rsa.private_key_pem
-  filename = "tfkey"
 }
