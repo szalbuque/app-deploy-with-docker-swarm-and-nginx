@@ -41,7 +41,7 @@ module "key-pair" {
   source  = "terraform-aws-modules/key-pair/aws"
   version = "2.0.2"
 
-  name = var.key_name
+  key_name = var.key_name
   public_key = file("../dio-app-key.pub")
 }
 
