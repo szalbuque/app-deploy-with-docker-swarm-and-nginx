@@ -61,54 +61,9 @@ Se um dos nós tiver um problema de hardware e parar de funcionar, o Docker Swar
 
 
 ## Criar a imagem para o container MySQL com o script SQL "banco.sql":
-* Acessar a instância 0 por SSH;
-* Entrar na pasta da aplicação clonada;
-* Criar uma subpasta "db" e mover para ela o arquivo banco.sql;
-* Criar o arquivo dockerfile usando o nano (usar este conteúdo: [dockerfile para o banco de dados](db/dockerfile)).
-* Usar o comando docker build para gerar a imagem:
-> docker build . -t szalbuque/dioapp:1.0
-
-root@ip-10-0-101-148 db # docker image ls
-REPOSITORY     |      TAG   |    IMAGE ID   |    CREATED     |     SIZE
----------------|------------|---------------|----------------|----------
-szalbuque/dioapp  |   1.0    |   0a8b7889b2da |  19 seconds ago |  496MB
-mysql/mysql-server |  latest  |  1d9c2219ff69 |  6 weeks ago   |   496MB
-
-## Enviar a imagem para o Docker Hub:
-* Fazer o login no Docker Hub com o comando "docker login";
-* Enviar a imagem para o Docker Hub com o comando:
-> docker push szalbuque/dioapp:1.0
-
-## Criar o container do banco de dados na instância 0, usando a imagem criada acima:
-
-* Criar um volume para armazenar os dados (O docker aloca o volume na pasta /var/lib/docker/volumes):
-> docker volume create volumedb
-> [root@ip-10-0-101-148 toshiro-shibakita]# docker volume ls
-
-DRIVER  |  VOLUME NAME
---------|-------------
-local   |  5ce55ecfd682eb854717d7425c133b6a26c9e5e23c4de69c42e956f3cba306e1
-local   |  volumedb
-
+* Veja a preparação do container do banco de dados em: [dbREADME.md](db/dbREADME.md)
   
-* Criar o container
-> docker run -d --name mysqldb -v volumedb:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=12345  szalbuque/dioapp:1.0<br>
-> docker ps<br>
-
-#####
-##### ESTÁ DANDO ERRO NA CRIAÇÃO DO CONTAINER COM O VOLUMEDB, SEM ELE ESTÁ FUNCIONANDO
-
-CONTAINER ID |  IMAGE   |  COMMAND     |             CREATED   |      STATUS    |     PORTS        |         NAMES
--------------|----------|--------------|-----------------------|----------------|------------------|------------------
-ff91469d1447 |  mysql   |  "docker-entrypoint.s…" |  7 seconds ago |  Up 6 seconds |  3306/tcp, 33060/tcp |  mysqldb
-
-* Entrar no container:
-> docker exec -it mysqldb /bin/bash
-
-* Entrar no mysql:
-> mysql -u root -p
-
-
+* 
 
 ## Criação do container da aplicação em PHP:
 > /var/lib/docker/volumes
