@@ -71,4 +71,6 @@ ff91469d1447 |  mysql   |  "docker-entrypoint.s…" |  7 seconds ago |  Up 6 sec
 * Estava usando o comando errado para criar o container. Removi o container e criei novamente com o comando:
 > docker run -dti -p 3306:3306 --name mysqldb -v /data/mysqldb:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=12345  szalbuque/dioapp:1.1
 * A porta está aberta. Mas ainda não consigo acessar pelo Workbench. 
-* 
+* Corrigi o problema entrando no container e no mysql e executando o comando:
+> update mysql.user set host = '%' where user='root';
+

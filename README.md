@@ -62,8 +62,20 @@ Se um dos nós tiver um problema de hardware e parar de funcionar, o Docker Swar
 
 ## Criar a imagem para o container MySQL com o script SQL "banco.sql":
 * Veja a preparação do container do banco de dados em: [dbREADME.md](db/dbREADME.md)
-  
-* 
 
 ## Criação do container da aplicação em PHP:
-> /var/lib/docker/volumes
+* Copiar arquivo index.php para a pasta local (na instância 0): /data/app
+* Editar o arquivo index.php para inserir o IP externo do servidor do banco de dados
+* Criar o container da aplicação com o comando:
+> docker run --name web-dio-app -dt -p 80:80 -v /data/app:/app/ webdevops/php-apache:alpine-php7
+* Container criado:
+
+CONTAINER ID  | IMAGE  |    COMMAND    |   CREATED   |  STATUS | PORTS  |  NAMES
+--------------|--------|---------------|-------------|---------|--------|--------
+60ff7c8dd5dc |  webdevops/php-apache:alpine-php7 |  "/entrypoint supervi…" |  3 minutes ago |   Up 3 minutes      |        443/tcp, 0.0.0.0:80->80/tcp, :::80->80/tcp, 9000/tcp     |    web-dio-app
+
+## Teste da aplicação:
+* Inserir o IP externo do servidor no browser de qualquer computador com acesso à internet. Como a porta 80 já está aberta no Security Group e é a porta padrão HTTP, o browser irá abrir o arquivo index.php.
+* Funcionou, porém exibiu as seguintes mensagens de erro:
+> Warning: mysqli::__construct(): The server requested authentication method unknown to the client caching_sha2_password in /app/index.php on line 24
+> Warning: mysqli::__construct(): (HY000/2054): The server requested authentication method unknown to the client in /app/index.php on line 24 Connect failed: The server requested authentication method unknown to the client
