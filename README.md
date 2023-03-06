@@ -93,5 +93,46 @@ CONTAINER ID  | IMAGE  |    COMMAND    |   CREATED   |  STATUS | PORTS  |  NAMES
 
 ![](images/visualiza-registro-workbench.png)
 
+## CRIAÇÃO DO CLUSTER SWARM:
+* Agora que a aplicação está funcionando, o container PHP será removido para que seja executado num cluster DOCKER SWARM.
+* Iniciar um cluster Docker Swarm (na instância 0):
+> docker swarm init
+* Copiar o comando que é exibido e colar na linha de comando das outras duas instâncias EC2 para adicioná-las ao cluster.
+* Ver os nós (comando docker node ls):
+![](images/nósDoCluser.png)
 
+### Criar o serviço dentro do cluster (deploy da aplicação):
+> docker service create --name web-dio-app --replicas 10 -dt -p 80:80 --mount type=volume,source=app,destination=/app/ webdevops/php-apache:alpine-php7
+* Ver as réplicas criadas:
+> docker service ps web-dio-app
 
+### Replicar o conteúdo da aplicação para todas os nós do cluster:
+* Instalar o NFS server na instância 0:
+* Editar o arquivo /etc/exports e incluir a linha:
+> /var/lib/docker/volumes/app/_data *(rw,sync,subtree_check)
+* Isso vai criar um compartilhamento da pasta que qualquer um pode acessar (isso não é seguro, mas para o exercício está ok).
+* Atualizar o NFS:
+> exportfs -ar
+> shoumount -e
+* Configurar a replicação nas outras duas instâncias:
+> mount -o v3 IPDOSERVIDOR0:/var/lib/docker/volumes/app/_data /var/lib/docker/volumes/app/_data
+
+## Configurar um Load Balancer com o NGINX:
+* Quando uma requisição chegar no servidor 0, o NGINX vai usar um algoritmo 'round robin' para alternar entre as instâncias que fazem parte do cluster. A cada requisição, um nó do cluster vai responder.
+* No servidor 0, criar uma pasta:
+> mkdir /proxy
+* Dentro dessa pasta, criar um arquivo nginx.conf com o conteúdo que está aqui: [nginx](nginx.conf).
+* Substituir os IPs que estão lá pelos IPs privados das instâncias EC2.
+* Criar uma imagem para um container NGINX contendo este arquivo de configuração usando este [dockerfile](dockerfile).
+> docker build -t proxy-app .
+* Rodar o container:
+> docker run --name my-proxy-app -dti -p 4500:4500 proxy-app
+
+## Testar a aplicação rodando no cluster com o NGINX:
+* Abrir a porta 4500 no Security Group;
+* Abrir o browser em qualquer computador com acesso à internet e acessar:
+IPDOSERVIDOR0:4500
+![](images/appnocluster.png)
+* Ver os registros no banco de dados, com diferentes identificações de hosts:
+
+![](images/registrosnodbcomnginx.png)
