@@ -79,3 +79,19 @@ CONTAINER ID  | IMAGE  |    COMMAND    |   CREATED   |  STATUS | PORTS  |  NAMES
 * Funcionou, porém exibiu as seguintes mensagens de erro:
 > Warning: mysqli::__construct(): The server requested authentication method unknown to the client caching_sha2_password in /app/index.php on line 24
 > Warning: mysqli::__construct(): (HY000/2054): The server requested authentication method unknown to the client in /app/index.php on line 24 Connect failed: The server requested authentication method unknown to the client
+* Pesquisando este erro na internet, vi que várias pessoas resolveram usando o comando (dentro do mysql, com a senha do root):
+> ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '123456'; 
+* Porém, quando faço isso, há o erro:
+> ERROR 1396 (HY000): Operation ALTER USER failed for 'root'@'localhost'
+* Pesquisando mais, vi que o root deve ser usado para 'todos', da seguinte forma:
+> ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY '12345';
+* Funcionou!
+
+![](images/web-app-funcionando.png)
+
+* É possível ver o registro adicionado através do Workbench:
+
+![](images/visualiza-registro-workbench.png)
+
+
+
